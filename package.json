@@ -1,11 +1,12 @@
 {
-  "name": "frontend",
+  "name": "notes-app-front",
   "proxy": "http://127.0.0.1:8000/",
   "version": "0.1.0",
   "private": true,
   "dependencies": {
     "@emotion/react": "^11.7.1",
     "@emotion/styled": "^11.6.0",
+    "@mui/icons-material": "^5.2.4",
     "@mui/material": "^5.2.4",
     "@testing-library/jest-dom": "^5.16.1",
     "@testing-library/react": "^11.2.7",
