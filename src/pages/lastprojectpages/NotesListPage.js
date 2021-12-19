@@ -1,8 +1,8 @@
 import React, { useState, useEffect } from 'react';
 import axios from 'axios';
 
-import ListItem from '../components/ListItem';
-import AddButton from '../components/AddButton';
+import ListItem from '../../components/ListItem';
+import AddButton from '../../components/AddButton';
 
 const NotesListPage = () => {
     const [notes, setNotes] = useState([]);
