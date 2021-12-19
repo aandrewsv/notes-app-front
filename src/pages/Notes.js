@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Container, Grid, Paper } from '@material-ui/core';
+import { Container, Grid } from '@material-ui/core';
 import NoteCard from '../components/NoteCard';
 export default function Notes() {
     const [notes, setNotes] = useState([]);
@@ -15,7 +15,7 @@ export default function Notes() {
             method: 'DELETE',
         });
 
-        const newNotes = notes.filter((note) => note.id != id);
+        const newNotes = notes.filter((note) => note.id !== id);
         setNotes(newNotes);
     };
 
