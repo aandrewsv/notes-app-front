@@ -1,17 +1,18 @@
 import { useState } from 'react';
 import {
     Container,
-    FormControlLabel,
-    RadioGroup,
     Typography,
+    TextField,
+    FormControlLabel,
+    FormLabel,
+    FormControl,
+    RadioGroup,
+    Radio,
+    Button,
+    makeStyles,
 } from '@material-ui/core';
-import { Button } from '@material-ui/core';
+import { useNavigate } from 'react-router-dom';
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
-import { makeStyles } from '@material-ui/core';
-import { TextField } from '@material-ui/core';
-import { Radio } from '@material-ui/core';
-import { FormControl } from '@material-ui/core';
-import { FormLabel } from '@material-ui/core';
 
 const useStyles = makeStyles({
     field: {
@@ -22,6 +23,8 @@ const useStyles = makeStyles({
 });
 export default function Create() {
     const classes = useStyles();
+    const navigate = useNavigate();
+
     const [title, setTitle] = useState('');
     const [details, setDetails] = useState('');
     const [titleError, setTitleError] = useState(false);
@@ -35,11 +38,11 @@ export default function Create() {
         if (title === '') setTitleError(true);
         if (details === '') setDetailsError(true);
         if (title && details) {
-            console.log({
-                title,
-                details,
-                tag,
-            });
+            fetch('http://localhost:8000/notes', {
+                method: 'POST',
+                headers: { 'Content-type': 'application/json' },
+                body: JSON.stringify({ title, details, tag }),
+            }).then(() => navigate('/'));
         }
     };
 
