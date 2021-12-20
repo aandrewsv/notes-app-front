@@ -19,10 +19,16 @@
       "id": 3
     },
     {
-      "title": "Marios Birthday preset",
-      "details": "xasdaslkkdjqewqueoapciadadwweadsdwa",
-      "tag": "reminders",
-      "id": 4
+      "title": "Work note!!",
+      "details": "Lorem ipsum, dolor sit amet consectetur adipisicing elit. Id consectetur, natus harum similique accusamus quas quis, minima facilis impedit neque aliquid iusto asperiores cum eius assumenda voluptatibus optio quae dignissimos.",
+      "tag": "work",
+      "id": 6
+    },
+    {
+      "title": "asaskdjkas",
+      "details": "Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book. Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.",
+      "tag": "money",
+      "id": 7
     }
   ]
 }
