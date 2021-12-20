@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import {
     Container,
     Typography,
@@ -11,7 +11,7 @@ import {
     Button,
     makeStyles,
 } from '@material-ui/core';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate, useLocation } from 'react-router-dom';
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
 
 const useStyles = makeStyles({
@@ -21,15 +21,30 @@ const useStyles = makeStyles({
         display: 'block',
     },
 });
-export default function Create() {
+export default function Update() {
     const classes = useStyles();
     const navigate = useNavigate();
+    const location = useLocation();
 
+    const [note, setNote] = useState({});
     const [title, setTitle] = useState('');
     const [body, setBody] = useState('');
     const [titleError, setTitleError] = useState(false);
     const [bodyError, setBodyError] = useState(false);
-    const [tag, setTag] = useState('Money');
+    const [tag, setTag] = useState('Default');
+
+    const noteId = location.pathname.split('/')[2];
+    useEffect(() => {
+        fetch(`http://localhost:8000/api/notes/${noteId}`)
+            .then((res) => res.json())
+            .then((data) => setNote(data));
+    }, [noteId]);
+
+    useEffect(() => {
+        setTitle(note.title);
+        setBody(note.body);
+        setTag(note.tag);
+    }, [note]);
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -38,8 +53,8 @@ export default function Create() {
         if (title === '') setTitleError(true);
         if (body === '') setBodyError(true);
         if (title && body) {
-            fetch('http://localhost:8000/api/notes/', {
-                method: 'POST',
+            fetch('http://localhost:8000/api/notes' + noteId, {
+                method: 'PUT',
                 headers: { 'Content-type': 'application/json' },
                 body: JSON.stringify({ title, body, tag }),
             }).then(() => navigate('/'));
@@ -54,7 +69,7 @@ export default function Create() {
                 component='h2'
                 gutterBottom
             >
-                Create a New Note
+                Update Note
             </Typography>
 
             <form noValidate autoComplete='off' onSubmit={handleSubmit}>
@@ -67,6 +82,7 @@ export default function Create() {
                     fullWidth
                     required
                     error={titleError}
+                    value={title}
                 />
                 <TextField
                     onChange={(e) => setBody(e.target.value)}
@@ -79,6 +95,7 @@ export default function Create() {
                     fullWidth
                     required
                     error={bodyError}
+                    value={body}
                 />
                 <FormControl className={classes.field}>
                     <FormLabel>Note Tag</FormLabel>
@@ -106,6 +123,11 @@ export default function Create() {
                             control={<Radio />}
                             label='Work'
                         />
+                        <FormControlLabel
+                            value='D'
+                            control={<Radio />}
+                            label='Default'
+                        />
                     </RadioGroup>
                 </FormControl>
                 <Button
@@ -114,7 +136,7 @@ export default function Create() {
                     variant='contained'
                     endIcon={<KeyboardArrowRightIcon />}
                 >
-                    Submit
+                    Update
                 </Button>
             </form>
         </Container>

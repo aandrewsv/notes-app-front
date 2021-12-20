@@ -1,5 +1,5 @@
 import { useState, useEffect } from 'react';
-import { Container, Grid } from '@material-ui/core';
+import { Container } from '@material-ui/core';
 import NoteCard from '../components/NoteCard';
 import Masonry from 'react-masonry-css';
 import '../index.css';
@@ -7,13 +7,13 @@ export default function Notes() {
     const [notes, setNotes] = useState([]);
 
     useEffect(() => {
-        fetch('http://localhost:8000/notes')
+        fetch('http://localhost:8000/api/notes')
             .then((res) => res.json())
             .then((data) => setNotes(data));
     }, []);
 
     const handleDelete = async ({ id }) => {
-        await fetch('http://localhost:8000/notes/' + id, {
+        await fetch('http://localhost:8000/api/notes/' + id, {
             method: 'DELETE',
         });
 

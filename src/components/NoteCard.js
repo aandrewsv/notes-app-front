@@ -9,83 +9,58 @@ import {
     Chip,
     Avatar,
 } from '@material-ui/core';
-import { DeleteOutlined } from '@material-ui/icons';
+import { DeleteOutlined, EditOutlined } from '@material-ui/icons';
+import getTextAndStylesOfTag from '../helpers/helpers';
+import { useNavigate } from 'react-router-dom';
 
 const useStyles = makeStyles({
     tag_bg: {
-        backgroundColor: (note) => {
-            switch (note.tag) {
-                case 'Work':
-                    return '#ffcdd2';
-                case 'Money':
-                    return '#c8e6c9';
-                case 'Todos':
-                    return '#b2ebf2';
-                case 'Reminders':
-                    return '#ffecb3';
-                default:
-                    return '#d7ccc8';
-            }
-        },
-    },
-    tag_avatar_bg: {
-        backgroundColor: (note) => {
-            switch (note.tag) {
-                case 'Work':
-                    return '#ffcccb';
-                case 'Money':
-                    return '#c8e6c9';
-                case 'Todos':
-                    return '#b2ebf2';
-                case 'Reminders':
-                    return '#ffecb3';
-                default:
-                    return '#d7ccc8';
-            }
-        },
+        backgroundColor: (note) => getTextAndStylesOfTag(note['tag'], 'tag_bg'),
     },
     tag_chip_bg: {
-        backgroundColor: (note) => {
-            switch (note.tag) {
-                case 'Work':
-                    return '#cb9ca1';
-                case 'Money':
-                    return '#97b498';
-                case 'Todos':
-                    return '#81b9bf';
-                case 'Reminders':
-                    return '#cbba83';
-                default:
-                    return '#a69b97';
-            }
-        },
+        backgroundColor: (note) =>
+            getTextAndStylesOfTag(note['tag'], 'tag_chip_bg'),
     },
 });
 
 const NoteCard = ({ note, handleDelete }) => {
     const classes = useStyles(note);
+    const navigate = useNavigate();
+
     return (
         <div>
             <Card elevation={2} className={classes.tag_bg}>
                 <CardHeader
-                    avatar={<Avatar>{note.tag[0].toUpperCase()}</Avatar>}
+                    avatar={
+                        <Avatar className={classes.tag_chip_bg}>
+                            {note.tag[0]}
+                        </Avatar>
+                    }
                     action={
-                        <IconButton onClick={() => handleDelete(note)}>
-                            <DeleteOutlined />
-                        </IconButton>
+                        <>
+                            <IconButton
+                                onClick={() => navigate(`/update/${note.id}`)}
+                            >
+                                <EditOutlined />
+                            </IconButton>
+                            <IconButton onClick={() => handleDelete(note)}>
+                                <DeleteOutlined />
+                            </IconButton>
+                        </>
                     }
                     title={note.title}
                     subheader={
                         <Chip
                             className={classes.tag_chip_bg}
-                            label={note.tag}
+                            size='small'
+                            label={getTextAndStylesOfTag(note['tag'], 'uitext')}
                             variant='outlined'
                         />
                     }
                 />
                 <CardContent>
                     <Typography variant='body2' color='textSecondary'>
-                        {note.details}
+                        {note.body}
                     </Typography>
                 </CardContent>
             </Card>
