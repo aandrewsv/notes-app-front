@@ -7,24 +7,57 @@ import {
     Typography,
     makeStyles,
     Chip,
+    Avatar,
 } from '@material-ui/core';
 import { DeleteOutlined } from '@material-ui/icons';
 
 const useStyles = makeStyles({
     tag_bg: {
         backgroundColor: (note) => {
-            if (note.tag == 'work') return '#ffcdd2';
-            if (note.tag == 'money') return '#c8e6c9';
-            if (note.tag == 'todos') return '#b2ebf2';
-            if (note.tag == 'reminders') return '#ffecb3';
+            switch (note.tag) {
+                case 'Work':
+                    return '#ffcdd2';
+                case 'Money':
+                    return '#c8e6c9';
+                case 'Todos':
+                    return '#b2ebf2';
+                case 'Reminders':
+                    return '#ffecb3';
+                default:
+                    return '#d7ccc8';
+            }
+        },
+    },
+    tag_avatar_bg: {
+        backgroundColor: (note) => {
+            switch (note.tag) {
+                case 'Work':
+                    return '#ffcccb';
+                case 'Money':
+                    return '#c8e6c9';
+                case 'Todos':
+                    return '#b2ebf2';
+                case 'Reminders':
+                    return '#ffecb3';
+                default:
+                    return '#d7ccc8';
+            }
         },
     },
     tag_chip_bg: {
         backgroundColor: (note) => {
-            if (note.tag == 'work') return '#cb9ca1';
-            if (note.tag == 'money') return '#97b498';
-            if (note.tag == 'todos') return '#81b9bf';
-            if (note.tag == 'reminders') return '#cbba83';
+            switch (note.tag) {
+                case 'Work':
+                    return '#cb9ca1';
+                case 'Money':
+                    return '#97b498';
+                case 'Todos':
+                    return '#81b9bf';
+                case 'Reminders':
+                    return '#cbba83';
+                default:
+                    return '#a69b97';
+            }
         },
     },
 });
@@ -35,6 +68,7 @@ const NoteCard = ({ note, handleDelete }) => {
         <div>
             <Card elevation={2} className={classes.tag_bg}>
                 <CardHeader
+                    avatar={<Avatar>{note.tag[0].toUpperCase()}</Avatar>}
                     action={
                         <IconButton onClick={() => handleDelete(note)}>
                             <DeleteOutlined />

@@ -2,7 +2,7 @@ import { BrowserRouter as Router, Routes, Route } from 'react-router-dom';
 import Notes from './pages/Notes';
 import Create from './pages/Create';
 import { ThemeProvider, createTheme } from '@material-ui/core';
-import { purple } from '@material-ui/core/colors';
+import { lightBlue } from '@material-ui/core/colors';
 import Layout from './components/Layout';
 
 const theme = createTheme({
@@ -17,7 +17,7 @@ const theme = createTheme({
         primary: {
             main: '#fefefe',
         },
-        secondary: purple,
+        secondary: lightBlue,
     },
 });
 

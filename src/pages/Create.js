@@ -29,7 +29,7 @@ export default function Create() {
     const [details, setDetails] = useState('');
     const [titleError, setTitleError] = useState(false);
     const [detailsError, setDetailsError] = useState(false);
-    const [tag, setTag] = useState('money');
+    const [tag, setTag] = useState('Money');
 
     const handleSubmit = (e) => {
         e.preventDefault();
@@ -87,22 +87,22 @@ export default function Create() {
                         onChange={(e) => setTag(e.target.value)}
                     >
                         <FormControlLabel
-                            value='money'
+                            value='Money'
                             control={<Radio />}
                             label='Money'
                         />
                         <FormControlLabel
-                            value='todos'
+                            value='Todos'
                             control={<Radio />}
                             label='Todos'
                         />
                         <FormControlLabel
-                            value='reminders'
+                            value='Reminders'
                             control={<Radio />}
                             label='Reminders'
                         />
                         <FormControlLabel
-                            value='work'
+                            value='Work'
                             control={<Radio />}
                             label='Work'
                         />
