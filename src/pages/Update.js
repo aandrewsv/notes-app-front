@@ -13,6 +13,7 @@ import {
 } from '@material-ui/core';
 import { useNavigate, useLocation } from 'react-router-dom';
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
+import { getOneNote, updateNote } from '../helpers/apiCalls';
 
 const useStyles = makeStyles({
     field: {
@@ -34,11 +35,15 @@ export default function Update() {
     const [tag, setTag] = useState('Default');
 
     const noteId = location.pathname.split('/')[2];
+
     useEffect(() => {
-        fetch(`http://localhost:8000/api/notes/${noteId}`)
-            .then((res) => res.json())
-            .then((data) => setNote(data));
-    }, [noteId]);
+        getNote(noteId);
+    }, []);
+
+    const getNote = async (id) => {
+        const { data } = await getOneNote(id);
+        setNote(data);
+    };
 
     useEffect(() => {
         setTitle(note.title);
@@ -46,18 +51,15 @@ export default function Update() {
         setTag(note.tag);
     }, [note]);
 
-    const handleSubmit = (e) => {
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setTitleError(false);
         setBodyError(false);
         if (title === '') setTitleError(true);
         if (body === '') setBodyError(true);
         if (title && body) {
-            fetch('http://localhost:8000/api/notes' + noteId, {
-                method: 'PUT',
-                headers: { 'Content-type': 'application/json' },
-                body: JSON.stringify({ title, body, tag }),
-            }).then(() => navigate('/'));
+            await updateNote(noteId, JSON.stringify({ title, body, tag }));
+            navigate('/');
         }
     };
 
@@ -100,7 +102,7 @@ export default function Update() {
                 <FormControl className={classes.field}>
                     <FormLabel>Note Tag</FormLabel>
                     <RadioGroup
-                        value={tag}
+                        value={tag ? tag : 'Default'}
                         onChange={(e) => setTag(e.target.value)}
                     >
                         <FormControlLabel
