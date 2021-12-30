@@ -25,7 +25,7 @@ export async function appUserView() {
         withCredentials: true,
     };
     let response = await axios.get(`${BASE_URL}user/`, options);
-    return response;
+    return response.data;
 }
 
 export async function createNote(formData) {
