@@ -42,7 +42,7 @@ export default function Create() {
                 method: 'POST',
                 headers: { 'Content-type': 'application/json' },
                 body: JSON.stringify({ title, body, tag }),
-            }).then(() => navigate('/'));
+            }).then(() => navigate('/notes'));
         }
     };
 

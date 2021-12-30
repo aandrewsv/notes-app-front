@@ -1,4 +1,4 @@
-const getTextAndStylesOfTag = (tag, context) => {
+export const getTextAndStylesOfTag = (tag, context) => {
     switch (tag) {
         case 'W':
             if (context === 'tag_bg') return '#ffcdd2';
@@ -28,4 +28,15 @@ const getTextAndStylesOfTag = (tag, context) => {
     }
 };
 
-export default getTextAndStylesOfTag;
+export const handleNoteBody = ({ body }) => {
+    if (body.length > 100) {
+        return body.slice(0, 300) + '...';
+    }
+    return body;
+};
+export const handleNoteTitle = ({ title }) => {
+    if (title.length > 45) {
+        return title.slice(0, 45) + '...';
+    }
+    return title;
+};

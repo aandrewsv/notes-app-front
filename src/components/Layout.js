@@ -14,7 +14,6 @@ import {
 import { AddCircleOutlineOutlined, SubjectOutlined } from '@material-ui/icons';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { format } from 'date-fns';
-
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => {
@@ -78,7 +77,7 @@ const Layout = ({ children }) => {
                     <Typography className={classes.date}>
                         Today is the {format(new Date(), 'do MMM Y')}
                     </Typography>
-                    <Typography>Agustín</Typography>
+                    <Typography>Hello Agustín</Typography>
                     <Avatar src='/user_avatar.png' className={classes.avatar} />
                 </Toolbar>
             </AppBar>
@@ -91,7 +90,7 @@ const Layout = ({ children }) => {
             >
                 <div>
                     <Typography variant='h5' className={classes.title}>
-                        Ninja Notes
+                        Notes App
                     </Typography>
                 </div>
 

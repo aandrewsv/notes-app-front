@@ -13,8 +13,12 @@ export default function Notes() {
     }, []);
 
     const getNotes = async () => {
-        const { data } = await getAllNotes();
-        setNotes(data);
+        try {
+            const { data } = await getAllNotes();
+            setNotes(data);
+        } catch (error) {
+            console.log({ error });
+        }
     };
 
     const handleDelete = async ({ id }) => {

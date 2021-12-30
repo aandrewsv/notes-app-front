@@ -10,7 +10,11 @@ import {
     Avatar,
 } from '@material-ui/core';
 import { DeleteOutlined, EditOutlined } from '@material-ui/icons';
-import getTextAndStylesOfTag from '../helpers/helpers';
+import {
+    getTextAndStylesOfTag,
+    handleNoteTitle,
+    handleNoteBody,
+} from '../helpers/helpers';
 import { useNavigate } from 'react-router-dom';
 
 const useStyles = makeStyles({
@@ -48,7 +52,7 @@ const NoteCard = ({ note, handleDelete }) => {
                             </IconButton>
                         </>
                     }
-                    title={note.title}
+                    title={handleNoteTitle(note)}
                     subheader={
                         <Chip
                             className={classes.tag_chip_bg}
@@ -60,7 +64,7 @@ const NoteCard = ({ note, handleDelete }) => {
                 />
                 <CardContent>
                     <Typography variant='body2' color='textSecondary'>
-                        {note.body}
+                        {handleNoteBody(note)}
                     </Typography>
                 </CardContent>
             </Card>

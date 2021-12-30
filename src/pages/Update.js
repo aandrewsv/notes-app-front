@@ -38,7 +38,7 @@ export default function Update() {
 
     useEffect(() => {
         getNote(noteId);
-    }, []);
+    }, [noteId]);
 
     const getNote = async (id) => {
         const { data } = await getOneNote(id);
@@ -59,7 +59,7 @@ export default function Update() {
         if (body === '') setBodyError(true);
         if (title && body) {
             await updateNote(noteId, JSON.stringify({ title, body, tag }));
-            navigate('/');
+            navigate('/notes');
         }
     };
 
