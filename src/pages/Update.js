@@ -59,7 +59,7 @@ export default function Update() {
         if (body === '') setBodyError(true);
         if (title && body) {
             await updateNote(noteId, JSON.stringify({ title, body, tag }));
-            navigate('/notes');
+            navigate('/');
         }
     };
 

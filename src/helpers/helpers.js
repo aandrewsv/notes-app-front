@@ -40,3 +40,12 @@ export const handleNoteTitle = ({ title }) => {
     }
     return title;
 };
+
+export const getErrorTxtFromResponse = ({ data }) => {
+    let errorTxt = '';
+    let errorKeys = Object.keys(data);
+    for (let key of errorKeys) {
+        errorTxt += `- ${data[key]}\n`;
+    }
+    return errorTxt;
+};

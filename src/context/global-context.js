@@ -1,16 +1,14 @@
-import React from 'react'
+import React from 'react';
 
 const GlobalContext = React.createContext({
-  ui: {
-    loading: false,
-    setLoading: () => { },
-    snackbar: {},
-    setSnackbar: () => { }
-  },
-  auth: {
-    jwt: false,
-    setJwt: () => { }
-  }
+    ui: {
+        isLoading: false,
+        setIsLoading: () => {},
+        snackbar: {},
+        setSnackbar: () => {},
+        auth: {},
+        setAuth: () => {},
+    },
 });
 
 export default GlobalContext;

@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import {
     Container,
     Typography,
@@ -13,6 +13,9 @@ import {
 } from '@material-ui/core';
 import { useNavigate } from 'react-router-dom';
 import KeyboardArrowRightIcon from '@material-ui/icons/KeyboardArrowRight';
+import { createNote } from '../helpers/apiCalls';
+import GlobalContext from '../context/global-context';
+import { getErrorTxtFromResponse } from '../helpers/helpers';
 
 const useStyles = makeStyles({
     field: {
@@ -31,18 +34,28 @@ export default function Create() {
     const [bodyError, setBodyError] = useState(false);
     const [tag, setTag] = useState('Money');
 
-    const handleSubmit = (e) => {
+    const { ui } = useContext(GlobalContext);
+
+    const handleSubmit = async (e) => {
         e.preventDefault();
         setTitleError(false);
         setBodyError(false);
         if (title === '') setTitleError(true);
         if (body === '') setBodyError(true);
         if (title && body) {
-            fetch('http://localhost:8000/api/notes/', {
-                method: 'POST',
-                headers: { 'Content-type': 'application/json' },
-                body: JSON.stringify({ title, body, tag }),
-            }).then(() => navigate('/notes'));
+            try {
+                let response = await createNote({
+                    title,
+                    body,
+                    tag,
+                });
+                navigate('/');
+            } catch (error) {
+                ui.setSnackbar({
+                    message: getErrorTxtFromResponse(error.response),
+                    severity: 'error',
+                });
+            }
         }
     };
 

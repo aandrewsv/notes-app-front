@@ -1,4 +1,4 @@
-import React from 'react';
+import { useEffect, useState, useContext } from 'react';
 import {
     makeStyles,
     Drawer,
@@ -14,6 +14,9 @@ import {
 import { AddCircleOutlineOutlined, SubjectOutlined } from '@material-ui/icons';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { format } from 'date-fns';
+import { appUserView } from '../helpers/apiCalls';
+import GlobalContext from '../context/global-context';
+import { getErrorTxtFromResponse } from '../helpers/helpers';
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => {
@@ -56,6 +59,22 @@ const Layout = ({ children }) => {
     const navigate = useNavigate();
     const location = useLocation();
 
+    const { ui } = useContext(GlobalContext);
+
+    useEffect(async () => {
+        try {
+            let { first_name, last_name, email, id } = await appUserView();
+            ui.setAuth({
+                first_name,
+                last_name,
+                email,
+                id,
+            });
+        } catch (error) {
+            console.log(error);
+        }
+    }, [ui]);
+
     const menuItems = [
         {
             text: 'My Notes',
@@ -72,13 +91,21 @@ const Layout = ({ children }) => {
     return (
         <div className={classes.root}>
             {/* App Bar */}
+
             <AppBar className={classes.appbar} elevation={1}>
                 <Toolbar>
-                    <Typography className={classes.date}>
-                        Today is the {format(new Date(), 'do MMM Y')}
-                    </Typography>
-                    <Typography>Hello Agustín</Typography>
-                    <Avatar src='/user_avatar.png' className={classes.avatar} />
+                    {ui.auth.first_name && (
+                        <>
+                            <Typography className={classes.date}>
+                                Today is the {format(new Date(), 'do MMM Y')}
+                            </Typography>
+                            <Typography>{`Hello ${ui.auth.first_name} ${ui.auth.last_name}`}</Typography>
+                            <Avatar
+                                src='/user_avatar.png'
+                                className={classes.avatar}
+                            />
+                        </>
+                    )}
                 </Toolbar>
             </AppBar>
             {/* Side Drawer */}

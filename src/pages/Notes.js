@@ -1,12 +1,15 @@
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useContext } from 'react';
 import { Container } from '@material-ui/core';
 import NoteCard from '../components/NoteCard';
 import Masonry from 'react-masonry-css';
 import '../index.css';
 import { getAllNotes, deleteNote } from '../helpers/apiCalls';
+import GlobalContext from '../context/global-context';
+import { getErrorTxtFromResponse } from '../helpers/helpers';
 
 export default function Notes() {
     const [notes, setNotes] = useState([]);
+    const { ui } = useContext(GlobalContext);
 
     useEffect(() => {
         getNotes();
@@ -17,7 +20,10 @@ export default function Notes() {
             const { data } = await getAllNotes();
             setNotes(data);
         } catch (error) {
-            console.log({ error });
+            ui.setSnackbar({
+                message: getErrorTxtFromResponse(error.response),
+                severity: 'error',
+            });
         }
     };
 
