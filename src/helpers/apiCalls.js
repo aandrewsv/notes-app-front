@@ -10,6 +10,13 @@ export async function appLogin(formData) {
     let response = await axios.post(`${BASE_URL}signin/`, formData, options);
     return response;
 }
+export async function appLogout() {
+    const options = {
+        headers: { 'Content-Type': 'application/json' },
+        withCredentials: true,
+    };
+    await axios.post(`${BASE_URL}signout/`, options);
+}
 export async function appRegister(formData) {
     const options = {
         headers: { 'Content-Type': 'application/json' },

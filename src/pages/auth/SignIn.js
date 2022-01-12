@@ -1,4 +1,4 @@
-import React, { useContext } from 'react';
+import React from 'react';
 import { useForm } from 'react-hook-form';
 import { yupResolver } from '@hookform/resolvers/yup';
 import * as Yup from 'yup';
@@ -12,9 +12,9 @@ import {
 } from '@material-ui/core/';
 import { makeStyles } from '@material-ui/core/styles';
 import { useNavigate } from 'react-router-dom';
-import { appLogin } from '../../helpers/apiCalls';
-import GlobalContext from '../../context/global-context';
-import { getErrorTxtFromResponse } from '../../helpers/helpers';
+
+import { login } from '../../actions/auth';
+import { connect } from 'react-redux';
 
 const useStyles = makeStyles((theme) => ({
     paper: {
@@ -36,27 +36,13 @@ const useStyles = makeStyles((theme) => ({
     },
 }));
 
-export default function SignIn() {
+const SignIn = ({ login, isAuthenticated }) => {
     const classes = useStyles();
-    const { ui } = useContext(GlobalContext);
     const navigate = useNavigate();
 
-    const onSubmit = async ({ email, password }) => {
-        try {
-            let response = await appLogin({
-                email,
-                password,
-            });
-            ui.setSnackbar({
-                message: 'Authenticated',
-            });
-            navigate('/');
-        } catch (error) {
-            ui.setSnackbar({
-                message: getErrorTxtFromResponse(error.response),
-                severity: 'error',
-            });
-        }
+    const onSubmit = ({ email, password }) => {
+        login(email, password);
+        navigate('/');
     };
 
     // Validations
@@ -75,60 +61,77 @@ export default function SignIn() {
         resolver: yupResolver(validationSchema),
     });
 
+    // Check if user is authenticated
+    if (isAuthenticated) {
+        navigate('/');
+    }
+
     return (
-        <Container component='main' maxWidth='xs'>
-            <CssBaseline />
-            <div className={classes.paper}>
-                <form className={classes.form} noValidate>
-                    <TextField
-                        variant='outlined'
-                        margin='normal'
-                        required
-                        fullWidth
-                        id='email'
-                        label='Email Address'
-                        name='email'
-                        autoComplete='email'
-                        autoFocus
-                        {...register('email')}
-                        error={errors.email ? true : false}
-                    />
-                    <TextField
-                        variant='outlined'
-                        margin='normal'
-                        required
-                        fullWidth
-                        name='password'
-                        label='Password'
-                        type='password'
-                        id='password'
-                        autoComplete='current-password'
-                        {...register('password')}
-                        error={errors.password ? true : false}
-                    />
-                    <Button
-                        type='submit'
-                        fullWidth
-                        variant='contained'
-                        color='primary'
-                        className={classes.submit}
-                        onClick={handleSubmit(onSubmit)}
-                    >
-                        Sign In
-                    </Button>
-                    <Grid container justifyContent='flex-end'>
-                        <Grid item>
-                            <Link
-                                href='#'
-                                onClick={() => navigate('/register')}
-                                variant='body2'
+        <>
+            {!isAuthenticated ? (
+                <Container component='main' maxWidth='xs'>
+                    <CssBaseline />
+                    <div className={classes.paper}>
+                        <form className={classes.form} noValidate>
+                            <TextField
+                                variant='outlined'
+                                margin='normal'
+                                required
+                                fullWidth
+                                id='email'
+                                label='Email Address'
+                                name='email'
+                                autoComplete='email'
+                                autoFocus
+                                {...register('email')}
+                                error={errors.email ? true : false}
+                            />
+                            <TextField
+                                variant='outlined'
+                                margin='normal'
+                                required
+                                fullWidth
+                                name='password'
+                                label='Password'
+                                type='password'
+                                id='password'
+                                autoComplete='current-password'
+                                {...register('password')}
+                                error={errors.password ? true : false}
+                            />
+                            <Button
+                                type='submit'
+                                fullWidth
+                                variant='contained'
+                                color='primary'
+                                className={classes.submit}
+                                onClick={handleSubmit(onSubmit)}
                             >
-                                Don't have an account? Sign Up
-                            </Link>
-                        </Grid>
-                    </Grid>
-                </form>
-            </div>
-        </Container>
+                                Sign In
+                            </Button>
+                            <Grid container justifyContent='flex-end'>
+                                <Grid item>
+                                    <Link
+                                        href='#'
+                                        onClick={() => navigate('/register')}
+                                        variant='body2'
+                                    >
+                                        Don't have an account? Sign Up
+                                    </Link>
+                                </Grid>
+                            </Grid>
+                        </form>
+                    </div>
+                </Container>
+            ) : (
+                navigate('/')
+            )}
+        </>
     );
-}
+};
+
+const mapStateToProps = (state) => ({
+    isAuthenticated: state.auth.isAuthenticated,
+});
+
+export default connect(mapStateToProps, { login })(SignIn);

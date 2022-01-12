@@ -44,7 +44,7 @@ export default function Create() {
         if (body === '') setBodyError(true);
         if (title && body) {
             try {
-                let response = await createNote({
+                await createNote({
                     title,
                     body,
                     tag,

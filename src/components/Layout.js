@@ -1,5 +1,6 @@
-import { useEffect, useState, useContext } from 'react';
+import { useEffect } from 'react';
 import {
+    Grid,
     makeStyles,
     Drawer,
     Typography,
@@ -9,14 +10,15 @@ import {
     ListItemText,
     AppBar,
     Toolbar,
-    Avatar,
+    ButtonGroup,
+    Button,
 } from '@material-ui/core';
 import { AddCircleOutlineOutlined, SubjectOutlined } from '@material-ui/icons';
 import { useNavigate, useLocation } from 'react-router-dom';
 import { format } from 'date-fns';
-import { appUserView } from '../helpers/apiCalls';
-import GlobalContext from '../context/global-context';
-import { getErrorTxtFromResponse } from '../helpers/helpers';
+import { connect } from 'react-redux';
+import { checkAuthenticated, load_user } from '../actions/auth';
+
 const drawerWidth = 240;
 
 const useStyles = makeStyles((theme) => {
@@ -54,26 +56,16 @@ const useStyles = makeStyles((theme) => {
     };
 });
 
-const Layout = ({ children }) => {
+const Layout = (props) => {
     const classes = useStyles();
     const navigate = useNavigate();
     const location = useLocation();
 
-    const { ui } = useContext(GlobalContext);
-
-    useEffect(async () => {
-        try {
-            let { first_name, last_name, email, id } = await appUserView();
-            ui.setAuth({
-                first_name,
-                last_name,
-                email,
-                id,
-            });
-        } catch (error) {
-            console.log(error);
-        }
-    }, [ui]);
+    useEffect(() => {
+        props.checkAuthenticated();
+        props.load_user();
+        // eslint-disable-next-line react-hooks/exhaustive-deps
+    }, []);
 
     const menuItems = [
         {
@@ -94,18 +86,25 @@ const Layout = ({ children }) => {
 
             <AppBar className={classes.appbar} elevation={1}>
                 <Toolbar>
-                    {ui.auth.first_name && (
-                        <>
-                            <Typography className={classes.date}>
-                                Today is the {format(new Date(), 'do MMM Y')}
-                            </Typography>
-                            <Typography>{`Hello ${ui.auth.first_name} ${ui.auth.last_name}`}</Typography>
-                            <Avatar
-                                src='/user_avatar.png'
-                                className={classes.avatar}
-                            />
-                        </>
-                    )}
+                    {/* <Typography className={classes.date}>
+                        Today is the {format(new Date(), 'do MMM Y')}
+                    </Typography>
+                    <Typography>{`Hello UserName`}</Typography>
+                    <Button disabled>Logout</Button> */}
+                    <Grid container justifyContent='flex-end'>
+                        <ButtonGroup
+                            variant='contained'
+                            color='secondary'
+                            aria-label='contained primary button group'
+                        >
+                            <Button onClick={() => navigate('/login')}>
+                                Login
+                            </Button>
+                            <Button onClick={() => navigate('/register')}>
+                                Register
+                            </Button>
+                        </ButtonGroup>
+                    </Grid>
                 </Toolbar>
             </AppBar>
             {/* Side Drawer */}
@@ -142,10 +141,10 @@ const Layout = ({ children }) => {
             </Drawer>
             <div className={classes.page}>
                 <div className={classes.toolbar}></div>
-                {children}
+                {props.children}
             </div>
         </div>
     );
 };
 
-export default Layout;
+export default connect(null, { checkAuthenticated, load_user })(Layout);
